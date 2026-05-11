@@ -1,138 +1,113 @@
-"use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-var data_js_1 = require("./data.js");
-var NabidkaPolozky = /** @class */ (function () {
-    function NabidkaPolozky(nazev, zakladniCena, mnozstvi) {
+import { katalog } from "./data.js";
+class NabidkaPolozky {
+    constructor(nazev, zakladniCena, mnozstvi) {
         this._mnozstvi = 0; // podtržítko!
         this.nazev = nazev;
         this.zakladniCena = zakladniCena;
         this.mnozstvi = mnozstvi; // zavolá setter
     }
-    Object.defineProperty(NabidkaPolozky.prototype, "mnozstvi", {
-        get: function () {
-            return this._mnozstvi; // podtržítko!
-        },
-        set: function (hodnota) {
-            if (hodnota < 1) {
-                this._mnozstvi = 1; // podtržítko!
-                console.error("Množství nesmí být menší než 1!");
-            }
-            else {
-                this._mnozstvi = hodnota; // podtržítko!
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    NabidkaPolozky.prototype.getNazev = function () {
+    set mnozstvi(hodnota) {
+        if (hodnota < 1) {
+            this._mnozstvi = 1; // podtržítko!
+            console.error("Množství nesmí být menší než 1!");
+        }
+        else {
+            this._mnozstvi = hodnota; // podtržítko!
+        }
+    }
+    get mnozstvi() {
+        return this._mnozstvi; // podtržítko!
+    }
+    getNazev() {
         return this.nazev;
-    };
-    NabidkaPolozky.prototype.vypis = function () {
-        return "".concat(this.nazev, " x ").concat(this.mnozstvi, " \u2014 ").concat(this.getCelkovaCena(), " K\u010D");
-    };
-    return NabidkaPolozky;
-}());
+    }
+    vypis() {
+        return `${this.nazev} x ${this.mnozstvi} -   ${this.getCelkovaCena()} Kč`;
+    }
+}
 // Třída Jidlo – reprezentuje pokrm v nabídce
-var Jidlo = /** @class */ (function (_super) {
-    __extends(Jidlo, _super);
+class Jidlo extends NabidkaPolozky {
     // Konstruktor – inicializuje jídlo včetně vlastních atributů
-    function Jidlo(nazev, zakladniCena, mnozstvi, cenaKrabice, jeVege) {
-        var _this = _super.call(this, nazev, zakladniCena, mnozstvi) || this;
-        _this.cenaKrabice = cenaKrabice;
-        _this.jeVege = jeVege;
-        return _this;
+    constructor(nazev, zakladniCena, mnozstvi, cenaKrabice, jeVege) {
+        super(nazev, zakladniCena, mnozstvi);
+        this.cenaKrabice = cenaKrabice;
+        this.jeVege = jeVege;
     }
     // Výpočet ceny – nevege položky mají příplatek 20 %, cena krabice se násobí množstvím
-    Jidlo.prototype.getCelkovaCena = function () {
+    getCelkovaCena() {
         if (this.jeVege === false) {
             return this.zakladniCena * this.mnozstvi + (this.cenaKrabice * this.mnozstvi);
         }
         else
             return (this.zakladniCena * 1.2) * this.mnozstvi + (this.cenaKrabice * this.mnozstvi);
-    };
-    return Jidlo;
-}(NabidkaPolozky));
+    }
+}
 // Třída Napoj – reprezentuje nápoj v nabídce
-var Napoj = /** @class */ (function (_super) {
-    __extends(Napoj, _super);
+class Napoj extends NabidkaPolozky {
     // Konstruktor – inicializuje nápoj včetně vlastních atributů
-    function Napoj(nazev, zakladniCena, mnozstvi, zalohaZaLahev, jeAlkohol) {
-        var _this = _super.call(this, nazev, zakladniCena, mnozstvi) || this;
-        _this.zalohaZaLahev = zalohaZaLahev;
-        _this.jeAlkohol = jeAlkohol;
-        return _this;
+    constructor(nazev, zakladniCena, mnozstvi, zalohaZaLahev, jeAlkohol) {
+        super(nazev, zakladniCena, mnozstvi);
+        this.zalohaZaLahev = zalohaZaLahev;
+        this.jeAlkohol = jeAlkohol;
     }
     // Výpočet ceny – základní cena krát množství plus záloha za každou lahev
-    Napoj.prototype.getCelkovaCena = function () {
+    getCelkovaCena() {
         return this.zakladniCena * this.mnozstvi + (this.zalohaZaLahev * this.mnozstvi);
-    };
-    return Napoj;
-}(NabidkaPolozky));
+    }
+}
 // Třída Kosik – spravuje objednávku a seznam položek
-var Kosik = /** @class */ (function () {
-    function Kosik() {
+class Kosik {
+    constructor() {
         this.polozky = [];
     }
     // Přidá položku do košíku
-    Kosik.prototype.pridatPolozku = function (polozka) {
+    pridatPolozku(polozka) {
         this.polozky.push(polozka);
-    };
+    }
     // Vrátí celkovou cenu všech položek bez DPH
-    Kosik.prototype.getCelkem = function () {
-        var sum = 0;
-        for (var _i = 0, _a = this.polozky; _i < _a.length; _i++) {
-            var polozka = _a[_i];
+    getCelkem() {
+        let sum = 0;
+        for (const polozka of this.polozky) {
             sum += polozka.getCelkovaCena();
         }
         return sum;
-    };
+    }
     // Vrátí celkovou cenu včetně DPH
-    Kosik.prototype.getCelkemSDph = function () {
+    getCelkemSDph() {
         return this.getCelkem() * 1.21;
-    };
+    }
     // Vypíše všechny položky a celkovou cenu do konzole
-    Kosik.prototype.vypis = function () {
-        for (var _i = 0, _a = this.polozky; _i < _a.length; _i++) {
-            var polozka = _a[_i];
+    vypis() {
+        for (const polozka of this.polozky) {
             console.log(polozka.vypis());
         }
         console.log("--------------------------");
-        console.log("Celkem bez DPH: ".concat(this.getCelkem(), " K\u010D"));
-        console.log("Celkem s DPH: ".concat(this.getCelkemSDph().toFixed(2), " K\u010D"));
-    };
-    return Kosik;
-}());
-// Testování v konzoli
-var kosik = new Kosik();
-kosik.pridatPolozku(new Jidlo("Smažený sýr", 85, 2, 4, true));
-kosik.pridatPolozku(new Jidlo("Kuřecí burger", 120, 1, 4, false));
-kosik.pridatPolozku(new Napoj("Kofola 0.5l", 35, 2, 3, false));
-kosik.vypis();
-function vytvorPolozku(nazev, mnozstvi, jeVege, jeAlkohol) {
-    var _a, _b;
-    var data = data_js_1.katalog.find(function (item) { return item.nazev === nazev; });
+        console.log(`Celkem bez DPH: ${this.getCelkem()} Kč`);
+        console.log(`Celkem s DPH: ${this.getCelkemSDph().toFixed(2)} Kč`);
+    }
+}
+// Pomocná funkce – vytvoří instanci správné třídy podle dat z katalogu
+// nazev: název položky z katalogu, mnozstvi: počet kusů, jeVege: volitelné (pouze pro jídla)
+function vytvorPolozku(nazev, mnozstvi, jeVege) {
+    var _a, _b, _c;
+    // Najde položku v katalogu podle názvu
+    const data = katalog.find(item => item.nazev === nazev);
+    // Pokud položka neexistuje, vyhodí chybu
     if (!data)
-        throw new Error("Polo\u017Eka \"".concat(nazev, "\" nebyla nalezena v katalogu"));
+        throw new Error(`Položka "${nazev}" nebyla nalezena v katalogu`);
     if (data.typ === "jidlo") {
+        // Vytvoří instanci Jidlo – jeVege bere od uživatele, ostatní data z katalogu
         return new Jidlo(data.nazev, data.zakladniCena, mnozstvi, (_a = data.cenaKrabice) !== null && _a !== void 0 ? _a : 0, jeVege !== null && jeVege !== void 0 ? jeVege : false);
     }
     else {
-        return new Napoj(data.nazev, data.zakladniCena, mnozstvi, (_b = data.zalohaZaLahev) !== null && _b !== void 0 ? _b : 0, jeAlkohol !== null && jeAlkohol !== void 0 ? jeAlkohol : false);
+        // Vytvoří instanci Napoj – jeAlkohol bere přímo z katalogu
+        return new Napoj(data.nazev, data.zakladniCena, mnozstvi, (_b = data.zalohaZaLahev) !== null && _b !== void 0 ? _b : 0, (_c = data.jeAlkohol) !== null && _c !== void 0 ? _c : false);
     }
 }
-new Jidlo("Smažený sýr", 85, 2, 4, true);
+// Testování v konzoli
+const kosik = new Kosik();
+kosik.pridatPolozku(vytvorPolozku("Smažený sýr", 2, false));
+kosik.pridatPolozku(vytvorPolozku("Kuřecí burger", 1, false));
+kosik.pridatPolozku(vytvorPolozku("Kofola 0.5l", 2));
+kosik.pridatPolozku(vytvorPolozku("Pivo Kozel 0.5l", 1));
+kosik.vypis();

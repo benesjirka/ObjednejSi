@@ -29,7 +29,7 @@ abstract class NabidkaPolozky {
     }
 
     vypis(): string {
-        return `${this.nazev} x ${this.mnozstvi} — ${this.getCelkovaCena()} Kč`;
+        return `${this.nazev} x ${this.mnozstvi} -   ${this.getCelkovaCena()} Kč`;
     }
 
     abstract getCelkovaCena(): number;
@@ -108,24 +108,31 @@ class Kosik {
     }
 }
 
-// Testování v konzoli
-const kosik = new Kosik();
-
-kosik.pridatPolozku(new Jidlo("Smažený sýr", 85, 2, 4, true));
-kosik.pridatPolozku(new Jidlo("Kuřecí burger", 120, 1, 4, false));
-kosik.pridatPolozku(new Napoj("Kofola 0.5l", 35, 2, 3, false));
-
-kosik.vypis();
-
-function vytvorPolozku(nazev: string, mnozstvi: number, jeVege?: boolean, jeAlkohol?: boolean): NabidkaPolozky {
+// Pomocná funkce – vytvoří instanci správné třídy podle dat z katalogu
+// nazev: název položky z katalogu, mnozstvi: počet kusů, jeVege: volitelné (pouze pro jídla)
+function vytvorPolozku(nazev: string, mnozstvi: number, jeVege?: boolean): NabidkaPolozky {
+    
+    // Najde položku v katalogu podle názvu
     const data = katalog.find(item => item.nazev === nazev);
+    
+    // Pokud položka neexistuje, vyhodí chybu
     if (!data) throw new Error(`Položka "${nazev}" nebyla nalezena v katalogu`);
 
     if (data.typ === "jidlo") {
+        // Vytvoří instanci Jidlo – jeVege bere od uživatele, ostatní data z katalogu
         return new Jidlo(data.nazev, data.zakladniCena, mnozstvi, data.cenaKrabice ?? 0, jeVege ?? false);
     } else {
-        return new Napoj(data.nazev, data.zakladniCena, mnozstvi, data.zalohaZaLahev ?? 0, jeAlkohol ?? false);
+        // Vytvoří instanci Napoj – jeAlkohol bere přímo z katalogu
+        return new Napoj(data.nazev, data.zakladniCena, mnozstvi, data.zalohaZaLahev ?? 0, data.jeAlkohol ?? false);
     }
 }
 
-new Jidlo("Smažený sýr", 85, 2, 4, true)
+// Testování v konzoli
+const kosik = new Kosik();
+
+kosik.pridatPolozku(vytvorPolozku("Smažený sýr", 2, false));
+kosik.pridatPolozku(vytvorPolozku("Kuřecí burger", 1, false));
+kosik.pridatPolozku(vytvorPolozku("Kofola 0.5l", 2));
+kosik.pridatPolozku(vytvorPolozku("Pivo Kozel 0.5l", 1))
+
+kosik.vypis();
