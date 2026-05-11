@@ -1,3 +1,4 @@
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -13,6 +14,8 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+Object.defineProperty(exports, "__esModule", { value: true });
+var data_js_1 = require("./data.js");
 var NabidkaPolozky = /** @class */ (function () {
     function NabidkaPolozky(nazev, zakladniCena, mnozstvi) {
         this._mnozstvi = 0; // podtržítko!
@@ -116,7 +119,20 @@ var Kosik = /** @class */ (function () {
 }());
 // Testování v konzoli
 var kosik = new Kosik();
-kosik.pridatPolozku(new Jidlo("Smažený sýr", 85, 1, 4, true));
+kosik.pridatPolozku(new Jidlo("Smažený sýr", 85, 2, 4, true));
 kosik.pridatPolozku(new Jidlo("Kuřecí burger", 120, 1, 4, false));
 kosik.pridatPolozku(new Napoj("Kofola 0.5l", 35, 2, 3, false));
 kosik.vypis();
+function vytvorPolozku(nazev, mnozstvi, jeVege, jeAlkohol) {
+    var _a, _b;
+    var data = data_js_1.katalog.find(function (item) { return item.nazev === nazev; });
+    if (!data)
+        throw new Error("Polo\u017Eka \"".concat(nazev, "\" nebyla nalezena v katalogu"));
+    if (data.typ === "jidlo") {
+        return new Jidlo(data.nazev, data.zakladniCena, mnozstvi, (_a = data.cenaKrabice) !== null && _a !== void 0 ? _a : 0, jeVege !== null && jeVege !== void 0 ? jeVege : false);
+    }
+    else {
+        return new Napoj(data.nazev, data.zakladniCena, mnozstvi, (_b = data.zalohaZaLahev) !== null && _b !== void 0 ? _b : 0, jeAlkohol !== null && jeAlkohol !== void 0 ? jeAlkohol : false);
+    }
+}
+new Jidlo("Smažený sýr", 85, 2, 4, true);

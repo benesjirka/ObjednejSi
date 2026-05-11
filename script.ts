@@ -1,3 +1,5 @@
+import { katalog } from "./data.js";
+
 abstract class NabidkaPolozky {
     protected nazev: string;
     protected zakladniCena: number;
@@ -109,8 +111,21 @@ class Kosik {
 // Testování v konzoli
 const kosik = new Kosik();
 
-kosik.pridatPolozku(new Jidlo("Smažený sýr", 85, 1, 4, true));
+kosik.pridatPolozku(new Jidlo("Smažený sýr", 85, 2, 4, true));
 kosik.pridatPolozku(new Jidlo("Kuřecí burger", 120, 1, 4, false));
 kosik.pridatPolozku(new Napoj("Kofola 0.5l", 35, 2, 3, false));
 
 kosik.vypis();
+
+function vytvorPolozku(nazev: string, mnozstvi: number, jeVege?: boolean, jeAlkohol?: boolean): NabidkaPolozky {
+    const data = katalog.find(item => item.nazev === nazev);
+    if (!data) throw new Error(`Položka "${nazev}" nebyla nalezena v katalogu`);
+
+    if (data.typ === "jidlo") {
+        return new Jidlo(data.nazev, data.zakladniCena, mnozstvi, data.cenaKrabice ?? 0, jeVege ?? false);
+    } else {
+        return new Napoj(data.nazev, data.zakladniCena, mnozstvi, data.zalohaZaLahev ?? 0, jeAlkohol ?? false);
+    }
+}
+
+new Jidlo("Smažený sýr", 85, 2, 4, true)
