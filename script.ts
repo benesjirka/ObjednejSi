@@ -75,14 +75,30 @@ class Napoj extends NabidkaPolozky {
 }
 
 // Třída Kosik – spravuje objednávku a seznam položek
+
 class Kosik {
     private polozky: NabidkaPolozky[] = [];
-
+ 
     // Přidá položku do košíku
     pridatPolozku(polozka: NabidkaPolozky): void {
         this.polozky.push(polozka);
     }
-
+ 
+    // Vrátí pole všech položek
+    getPolozky(): NabidkaPolozky[] {
+        return this.polozky;
+    }
+ 
+    // Odebere položku podle indexu
+    odebratPolozku(index: number): void {
+        this.polozky.splice(index, 1);
+    }
+ 
+    // Vyprázdní celý košík
+    vymazat(): void {
+        this.polozky = [];
+    }
+ 
     // Vrátí celkovou cenu všech položek bez DPH
     getCelkem(): number {
         let sum = 0;
@@ -91,23 +107,13 @@ class Kosik {
         }
         return sum;
     }
-
-    // Vrátí celkovou cenu včetně DPH
+ 
+    // Vrátí celkovou cenu včetně DPH (21 %)
     getCelkemSDph(): number {
         return this.getCelkem() * 1.21;
     }
-
-    // Vypíše všechny položky a celkovou cenu do konzole
-    vypis(): void {
-        for (const polozka of this.polozky) {
-            console.log(polozka.vypis());
-        }
-        console.log("--------------------------");
-        console.log(`Celkem bez DPH: ${this.getCelkem()} Kč`);
-        console.log(`Celkem s DPH: ${this.getCelkemSDph().toFixed(2)} Kč`);
-    }
 }
-
+ 
 // Pomocná funkce – vytvoří instanci správné třídy podle dat z katalogu
 // nazev: název položky z katalogu, mnozstvi: počet kusů, jeVege: volitelné (pouze pro jídla)
 function vytvorPolozku(nazev: string, mnozstvi: number, jeVege?: boolean): NabidkaPolozky {
@@ -126,13 +132,3 @@ function vytvorPolozku(nazev: string, mnozstvi: number, jeVege?: boolean): Nabid
         return new Napoj(data.nazev, data.zakladniCena, mnozstvi, data.zalohaZaLahev ?? 0, data.jeAlkohol ?? false);
     }
 }
-
-// Testování v konzoli
-const kosik = new Kosik();
-
-kosik.pridatPolozku(vytvorPolozku("Smažený sýr", 2, false));
-kosik.pridatPolozku(vytvorPolozku("Kuřecí burger", 1, false));
-kosik.pridatPolozku(vytvorPolozku("Kofola 0.5l", 2));
-kosik.pridatPolozku(vytvorPolozku("Pivo Kozel 0.5l", 1))
-
-kosik.vypis();

@@ -64,6 +64,18 @@ class Kosik {
     pridatPolozku(polozka) {
         this.polozky.push(polozka);
     }
+    // Vrátí pole všech položek
+    getPolozky() {
+        return this.polozky;
+    }
+    // Odebere položku podle indexu
+    odebratPolozku(index) {
+        this.polozky.splice(index, 1);
+    }
+    // Vyprázdní celý košík
+    vymazat() {
+        this.polozky = [];
+    }
     // Vrátí celkovou cenu všech položek bez DPH
     getCelkem() {
         let sum = 0;
@@ -72,18 +84,9 @@ class Kosik {
         }
         return sum;
     }
-    // Vrátí celkovou cenu včetně DPH
+    // Vrátí celkovou cenu včetně DPH (21 %)
     getCelkemSDph() {
         return this.getCelkem() * 1.21;
-    }
-    // Vypíše všechny položky a celkovou cenu do konzole
-    vypis() {
-        for (const polozka of this.polozky) {
-            console.log(polozka.vypis());
-        }
-        console.log("--------------------------");
-        console.log(`Celkem bez DPH: ${this.getCelkem()} Kč`);
-        console.log(`Celkem s DPH: ${this.getCelkemSDph().toFixed(2)} Kč`);
     }
 }
 // Pomocná funkce – vytvoří instanci správné třídy podle dat z katalogu
@@ -104,10 +107,3 @@ function vytvorPolozku(nazev, mnozstvi, jeVege) {
         return new Napoj(data.nazev, data.zakladniCena, mnozstvi, (_b = data.zalohaZaLahev) !== null && _b !== void 0 ? _b : 0, (_c = data.jeAlkohol) !== null && _c !== void 0 ? _c : false);
     }
 }
-// Testování v konzoli
-const kosik = new Kosik();
-kosik.pridatPolozku(vytvorPolozku("Smažený sýr", 2, false));
-kosik.pridatPolozku(vytvorPolozku("Kuřecí burger", 1, false));
-kosik.pridatPolozku(vytvorPolozku("Kofola 0.5l", 2));
-kosik.pridatPolozku(vytvorPolozku("Pivo Kozel 0.5l", 1));
-kosik.vypis();
