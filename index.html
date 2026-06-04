@@ -1,13 +1,118 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="cs">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Restaurace – objednávkový systém</title>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
+ 
+    <header class="w3-container w3-top w3-white w3-border-bottom app-header">
+        <div class="w3-row w3-padding">
+            <div class="w3-col s8 m9">
+                <h1 class="w3-large w3-margin-0">ObjednejSi</h1>
+                <p class="w3-small w3-text-grey w3-margin-0">Objednávkový systém</p>
+            </div>
+            <div class="w3-col s4 m3 w3-right-align w3-padding-small">
+                <span class="w3-badge w3-red w3-small" id="kosik-pocet">0</span>
+                <span class="w3-small w3-text-grey"> položek</span>
+            </div>
+        </div>
+    </header>
+ 
+    <div class="app-body">
+        <div class="w3-row-padding w3-stretch">
+ 
+            <!-- Levý panel – nabídka -->
+            <div class="w3-col m7 l8">
+                <div class="w3-container w3-padding-16">
+ 
+                    <!-- Jídla -->
+                    <h2 class="w3-medium section-title">
+                        <span class="section-icon">🍔</span> Jídla
+                    </h2>
+                    <div class="w3-row-padding" id="sekce-jidla"></div>
+ 
+                    <!-- Nápoje -->
+                    <h2 class="w3-medium section-title w3-margin-top">
+                        <span class="section-icon">🥤</span> Nápoje
+                    </h2>
+                    <div class="w3-row-padding" id="sekce-napoje"></div>
+ 
+                </div>
+            </div>
+ 
+            <!-- Pravý panel – košík -->
+            <div class="w3-col m5 l4">
+                <div class="w3-container w3-padding-16">
+ 
+                    <h2 class="w3-medium section-title">
+                        <span class="section-icon">🛒</span> Košík
+                    </h2>
+ 
+                    <div class="w3-card w3-white w3-round-large kosik-card">
+ 
+                        <!-- Prázdný košík -->
+                        <div id="kosik-prazdny" class="w3-container w3-padding-32 w3-center">
+                            <p class="w3-text-grey w3-large">🛒</p>
+                            <p class="w3-small w3-text-grey">Košík je prázdný</p>
+                        </div>
+ 
+                        <!-- Položky košíku -->
+                        <div id="kosik-polozky" class="w3-hide">
+                            <table class="w3-table w3-small kosik-tabulka">
+                                <thead>
+                                    <tr class="w3-light-grey">
+                                        <th>Položka</th>
+                                        <th class="w3-center">Ks</th>
+                                        <th class="w3-right-align">Cena</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="kosik-tbody"></tbody>
+                            </table>
+ 
+                            <div class="w3-container w3-padding kosik-souhrn">
+                                <div class="w3-row w3-margin-bottom">
+                                    <div class="w3-col s7 w3-text-grey w3-small">Celkem bez DPH:</div>
+                                    <div class="w3-col s5 w3-right-align w3-small" id="celkem-bez-dph">0 Kč</div>
+                                </div>
+                                <div class="w3-row w3-margin-bottom">
+                                    <div class="w3-col s7 w3-text-grey w3-small">DPH (21 %):</div>
+                                    <div class="w3-col s5 w3-right-align w3-small" id="vyse-dph">0 Kč</div>
+                                </div>
+                                <div class="w3-row celkem-radek">
+                                    <div class="w3-col s6 w3-bold">Celkem:</div>
+                                    <div class="w3-col s6 w3-right-align w3-bold w3-large" id="celkem-s-dph">0 Kč</div>
+                                </div>
+                            </div>
+ 
+                            <div class="w3-container w3-padding-bottom">
+                                <button class="w3-button w3-block w3-green w3-round objednat-btn" onclick="objednat()">
+                                    Objednat
+                                </button>
+                                <button class="w3-button w3-block w3-light-grey w3-round w3-margin-top w3-small" onclick="vymazatKosik()">
+                                    Vyprázdnit košík
+                                </button>
+                            </div>
+                        </div>
+ 
+                    </div>
+ 
+                    <!-- Potvrzení objednávky -->
+                    <div id="objednano-banner" class="w3-panel w3-green w3-round w3-hide w3-margin-top">
+                        <p class="w3-center w3-small">✅ Objednávka byla přijata! Děkujeme.</p>
+                    </div>
+ 
+                </div>
+            </div>
+ 
+        </div>
+    </div>
+ 
     <script type="module" src="script.js"></script>
-   
 </body>
 </html>
+ 
