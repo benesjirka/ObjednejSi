@@ -6,18 +6,21 @@ export const katalog = [
         nazev: "Smažený sýr",
         zakladniCena: 85,
         cenaKrabice: 4,
+        jeVegeVolba: false,
     },
     {
         typ: "jidlo",
         nazev: "Kuřecí burger",
         zakladniCena: 120,
         cenaKrabice: 4,
+        jeVegeVolba: true,
     },
     {
         typ: "jidlo",
         nazev: "Hranolky",
         zakladniCena: 45,
         cenaKrabice: 4,
+        jeVegeVolba: false,
     },
     // Nápoje
     {
