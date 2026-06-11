@@ -117,12 +117,14 @@ function renderKatalog() {
         const jeJidlo = item.typ === 'jidlo';
         const col = document.createElement('div');
         col.className = 'w3-col s12 m6';
-        // Badge podle typu položky
-        const nazevBadge = jeJidlo
+        // Badge podle typu polozky
+        const nazevBadge = jeJidlo && item.jeVegeVolba
             ? `<span class="polozka-badge badge-vege">vege volitelné</span>`
-            : item.jeAlkohol
+            : !jeJidlo && item.jeAlkohol
                 ? `<span class="polozka-badge badge-alkohol">alkohol</span>`
-                : `<span class="polozka-badge badge-bezalkohol">bez alkoholu</span>`;
+                : !jeJidlo
+                    ? `<span class="polozka-badge badge-bezalkohol">bez alkoholu</span>`
+                    : '';
         // Checkbox pro vegetariánskou volbu (pouze u jídel)
         // PO:
         const vegeCb = item.jeVegeVolba

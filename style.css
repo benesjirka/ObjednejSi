@@ -236,3 +236,27 @@ body {
         font-size: 1rem;
     }
 }
+/* Stejná výška karet ve sloupci */
+#sekce-jidla,
+#sekce-napoje {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+}
+
+#sekce-jidla .w3-col,
+#sekce-napoje .w3-col {
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+}
+
+.polozka-card {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.pridat-btn {
+    margin-top: auto;
+}
